@@ -14,6 +14,7 @@ body {
   font: 1em/1.5 "Helvetica Neue", Helvetica, Arial, sans-serif;
   background: #F5F5F5;
   perspective: 800px;
+  perspective-origin: 50% 0%;
 }
 
 h1, h2, #sub-title {
@@ -200,16 +201,27 @@ li {
   position: absolute;
   color:hotpink;
   font-size: 1.5em;
+  backface-visibility: hidden;
 }
 
 .side-a {
   z-index: 100;
 }
-
+.side-b {
+  transform: rotateY(-180deg);
+}
 .wrap {
-transition: transform 12s ease-in;
+transition: transform 1s ease-in;
+transform-style: preserve-3d;
 }
 
 .wrap:hover {
-  transform: rotateX(450deg) rotateY(450deg) rotateZ(450deg);
+  /*transform: rotate3d(1,0,0,65deg);*/
+  /*transform: translate3d(-100px, 50px, 150px);*/
+  /*transform: scaleZ(4) translateZ(100px);*/
+  transform: rotateY(1turn);
+}
+
+.side-b {
+	background: #33363B url('../img/logo.png');
 }

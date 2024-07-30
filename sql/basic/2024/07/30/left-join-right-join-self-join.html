@@ -7,8 +7,8 @@
 <meta name="generator" content="Jekyll v4.3.3" />
 <meta property="og:title" content="Left Join, Right Join, Self Join" />
 <meta property="og:locale" content="en_US" />
-<meta name="description" content="It’s something that I might have used once or twice in my work, but it came once in an interview so I thought I should give some more attention to it." />
-<meta property="og:description" content="It’s something that I might have used once or twice in my work, but it came once in an interview so I thought I should give some more attention to it." />
+<meta name="description" content="This is a basic introduction to all types of joins. It’s easier to understand with some real data and for this I prepared some tables with data in them. I’ve used the statements below in a POSTGRES database." />
+<meta property="og:description" content="This is a basic introduction to all types of joins. It’s easier to understand with some real data and for this I prepared some tables with data in them. I’ve used the statements below in a POSTGRES database." />
 <link rel="canonical" href="/sql/basic/2024/07/30/left-join-right-join-self-join.html" />
 <meta property="og:url" content="/sql/basic/2024/07/30/left-join-right-join-self-join.html" />
 <meta property="og:site_name" content="Java Interview Questions" />
@@ -17,7 +17,7 @@
 <meta name="twitter:card" content="summary" />
 <meta property="twitter:title" content="Left Join, Right Join, Self Join" />
 <script type="application/ld+json">
-{"@context":"https://schema.org","@type":"BlogPosting","dateModified":"2024-07-30T02:20:30+00:00","datePublished":"2024-07-30T02:20:30+00:00","description":"It’s something that I might have used once or twice in my work, but it came once in an interview so I thought I should give some more attention to it.","headline":"Left Join, Right Join, Self Join","mainEntityOfPage":{"@type":"WebPage","@id":"/sql/basic/2024/07/30/left-join-right-join-self-join.html"},"url":"/sql/basic/2024/07/30/left-join-right-join-self-join.html"}</script>
+{"@context":"https://schema.org","@type":"BlogPosting","dateModified":"2024-07-30T02:20:30+00:00","datePublished":"2024-07-30T02:20:30+00:00","description":"This is a basic introduction to all types of joins. It’s easier to understand with some real data and for this I prepared some tables with data in them. I’ve used the statements below in a POSTGRES database.","headline":"Left Join, Right Join, Self Join","mainEntityOfPage":{"@type":"WebPage","@id":"/sql/basic/2024/07/30/left-join-right-join-self-join.html"},"url":"/sql/basic/2024/07/30/left-join-right-join-self-join.html"}</script>
 <!-- End Jekyll SEO tag -->
 <link rel="stylesheet" href="/assets/main.css"><link type="application/atom+xml" rel="alternate" href="/feed.xml" title="Java Interview Questions" /></head>
 <body><header class="site-header" role="banner">
@@ -47,25 +47,20 @@
   </header>
 
   <div class="post-content e-content" itemprop="articleBody">
-    <p>It’s something that I might have used once or twice in my work, but it came once in an interview so I thought I should give some more attention to it.</p>
+    <p>This is a basic introduction to all types of joins. It’s easier to understand with some real data and for this I prepared some tables with data in them.
+I’ve used the statements below in a <code class="language-plaintext highlighter-rouge">POSTGRES</code> database.</p>
 
-<p>To understand these special joins, I prepared some tables:</p>
-
-<figure class="highlight"><pre><code class="language-sql" data-lang="sql"><span class="c1">-- Create the departments table</span>
-<span class="k">CREATE</span> <span class="k">TABLE</span> <span class="n">departments</span> <span class="p">(</span>
+<figure class="highlight"><pre><code class="language-sql" data-lang="sql"><span class="k">CREATE</span> <span class="k">TABLE</span> <span class="n">departments</span> <span class="p">(</span>
     <span class="n">department_id</span> <span class="nb">SERIAL</span> <span class="k">PRIMARY</span> <span class="k">KEY</span><span class="p">,</span>
     <span class="n">department_name</span> <span class="nb">VARCHAR</span><span class="p">(</span><span class="mi">100</span><span class="p">)</span> <span class="k">NOT</span> <span class="k">NULL</span>
 <span class="p">);</span>
 
-<span class="c1">-- Create the employees table</span>
 <span class="k">CREATE</span> <span class="k">TABLE</span> <span class="n">employees</span> <span class="p">(</span>
     <span class="n">employee_id</span> <span class="nb">SERIAL</span> <span class="k">PRIMARY</span> <span class="k">KEY</span><span class="p">,</span>
     <span class="n">manager_id</span> <span class="nb">INT</span><span class="p">,</span>
     <span class="n">employee_name</span> <span class="nb">VARCHAR</span><span class="p">(</span><span class="mi">100</span><span class="p">)</span> <span class="k">NOT</span> <span class="k">NULL</span><span class="p">,</span>
     <span class="n">department_id</span> <span class="nb">INT</span> <span class="k">REFERENCES</span> <span class="n">departments</span><span class="p">(</span><span class="n">department_id</span><span class="p">)</span>
 <span class="p">);</span></code></pre></figure>
-
-<p>And some inserts and updates:</p>
 
 <figure class="highlight"><pre><code class="language-sql" data-lang="sql"><span class="k">INSERT</span> <span class="k">INTO</span> <span class="n">departments</span> <span class="p">(</span><span class="n">department_name</span><span class="p">)</span>
 <span class="k">VALUES</span>
@@ -87,11 +82,11 @@
 
 <h3 id="inner-join">INNER JOIN</h3>
 
-<p>Let’s start from the employees table which looks like in the picture below. Notice that employee with id 7, does not have a department.</p>
+<p>To get an understanding of the inner join, let’s look first at how the employees table is looking. Notice that employee with id 7 does not have a department assigned.</p>
 
 <p><img src="/pictures/joins/employees.png" alt="Employees table" /></p>
 
-<p>When I run the inner join, it will retrieve the employees whose departmentId has a match in the departments table. So only the ones who have a departmentId that exists in departments table, because George does not have a departmentId, he will not be part of the result</p>
+<p>The inner join will retrieve the employees whose departmentId has a match in the departments table. Because there’s a foreign key from departmentId in employees to the id of the table departments, you can’t have an employee with a departmentId which does not exist in departments table. So only the employees who have a departmentId will be returned. Employee named George does not have a departmentId, so he will not be part of the result of the <code class="language-plaintext highlighter-rouge">INNER JOIN</code>.</p>
 
 <figure class="highlight"><pre><code class="language-sql" data-lang="sql"><span class="k">SELECT</span> <span class="n">employees</span><span class="p">.</span><span class="n">employee_name</span><span class="p">,</span> <span class="n">departments</span><span class="p">.</span><span class="n">department_name</span>
 <span class="k">FROM</span> <span class="n">employees</span>
@@ -103,13 +98,13 @@
 
 <h3 id="left-join">LEFT JOIN</h3>
 
-<p>This will return all rows from the left table, and the matched rows from the right table. If no match is found, it returns <code class="language-plaintext highlighter-rouge">NULL</code> for columns of the right table.</p>
+<p>This will return all rows from the left table, and the matched rows from the right table. If no match is found in the right table, it returns <code class="language-plaintext highlighter-rouge">NULL</code> for columns of the right table.</p>
 
-<p>So that’s how employees table looks like:</p>
+<p>Employees table looks like:</p>
 
 <p><img src="/pictures/joins/employees.png" alt="Employees table" /></p>
 
-<p>And this is the departments table:</p>
+<p>Departments table:</p>
 
 <p><img src="/pictures/joins/departments.png" alt="Departments table" /></p>
 

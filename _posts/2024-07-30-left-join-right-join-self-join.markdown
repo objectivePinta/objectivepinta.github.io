@@ -51,4 +51,12 @@ Let's start from the employees table which looks like in the picture below. Noti
 
 ![Employees table](/pictures/joins/employees.png)
 
+When I run the inner join, it will retrieve the employees whose departmentId has a match in the departments table
 
+{% highlight sql %}
+SELECT employees.employee_name, departments.department_name
+FROM employees
+INNER JOIN departments ON employees.department_id = departments.department_id;
+{% endhighlight %}
+
+![Employees table](/pictures/joins/innerJoin.png)

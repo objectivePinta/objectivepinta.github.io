@@ -5,18 +5,15 @@ date:   2024-07-30 05:20:30 +0300
 categories: sql basic
 ---
 
-It's something that I might have used once or twice in my work, but it came once in an interview so I thought I should give some more attention to it. 
-
-To understand these special joins, I prepared some tables:
+This is a basic introduction to all types of joins. It's easier to understand with some real data and for this I prepared some tables with data in them.
+I've used the statements below in a `POSTGRES` database.
 
 {% highlight sql %}
--- Create the departments table
 CREATE TABLE departments (
     department_id SERIAL PRIMARY KEY,
     department_name VARCHAR(100) NOT NULL
 );
 
--- Create the employees table
 CREATE TABLE employees (
     employee_id SERIAL PRIMARY KEY,
     manager_id INT,
@@ -25,7 +22,6 @@ CREATE TABLE employees (
 );
 {% endhighlight %}
 
-And some inserts and updates:
 
 {% highlight sql %}
 
@@ -51,11 +47,11 @@ VALUES
 
 ### INNER JOIN
 
-Let's start from the employees table which looks like in the picture below. Notice that employee with id 7, does not have a department.
+To get an understanding of the inner join, let's look first at how the employees table is looking. Notice that employee with id 7 does not have a department assigned.
 
 ![Employees table](/pictures/joins/employees.png)
 
-When I run the inner join, it will retrieve the employees whose departmentId has a match in the departments table. So only the ones who have a departmentId that exists in departments table, because George does not have a departmentId, he will not be part of the result
+The inner join will retrieve the employees whose departmentId has a match in the departments table. Because there's a foreign key from departmentId in employees to the id of the table departments, you can't have an employee with a departmentId which does not exist in departments table. So only the employees who have a departmentId will be returned. Employee named George does not have a departmentId, so he will not be part of the result of the `INNER JOIN`.
 
 {% highlight sql %}
 SELECT employees.employee_name, departments.department_name
@@ -69,13 +65,13 @@ And this is the result:
 
 ### LEFT JOIN
 
-This will return all rows from the left table, and the matched rows from the right table. If no match is found, it returns `NULL` for columns of the right table.
+This will return all rows from the left table, and the matched rows from the right table. If no match is found in the right table, it returns `NULL` for columns of the right table.
 
-So that's how employees table looks like:
+ Employees table looks like:
 
 ![Employees table](/pictures/joins/employees.png)
 
-And this is the departments table:
+Departments table:
 
 ![Departments table](/pictures/joins/departments.png)
 

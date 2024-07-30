@@ -60,27 +60,30 @@
 <span class="c1">-- Create the employees table</span>
 <span class="k">CREATE</span> <span class="k">TABLE</span> <span class="n">employees</span> <span class="p">(</span>
     <span class="n">employee_id</span> <span class="nb">SERIAL</span> <span class="k">PRIMARY</span> <span class="k">KEY</span><span class="p">,</span>
+    <span class="n">manager_id</span> <span class="nb">INT</span><span class="p">,</span>
     <span class="n">employee_name</span> <span class="nb">VARCHAR</span><span class="p">(</span><span class="mi">100</span><span class="p">)</span> <span class="k">NOT</span> <span class="k">NULL</span><span class="p">,</span>
     <span class="n">department_id</span> <span class="nb">INT</span> <span class="k">REFERENCES</span> <span class="n">departments</span><span class="p">(</span><span class="n">department_id</span><span class="p">)</span>
 <span class="p">);</span></code></pre></figure>
 
-<p>And some inserts:</p>
+<p>And some inserts and updates:</p>
 
-<figure class="highlight"><pre><code class="language-sql" data-lang="sql"><span class="c1">-- Insert data into the departments table</span>
-<span class="k">INSERT</span> <span class="k">INTO</span> <span class="n">departments</span> <span class="p">(</span><span class="n">department_name</span><span class="p">)</span>
+<figure class="highlight"><pre><code class="language-sql" data-lang="sql"><span class="k">INSERT</span> <span class="k">INTO</span> <span class="n">departments</span> <span class="p">(</span><span class="n">department_name</span><span class="p">)</span>
 <span class="k">VALUES</span>
     <span class="p">(</span><span class="s1">'Human Resources'</span><span class="p">),</span>
     <span class="p">(</span><span class="s1">'Engineering'</span><span class="p">),</span>
-    <span class="p">(</span><span class="s1">'Sales'</span><span class="p">);</span>
+    <span class="p">(</span><span class="s1">'Sales'</span><span class="p">),</span>
+    <span class="p">(</span><span class="s1">'Marketing'</span><span class="p">);</span>
 
 <span class="c1">-- Insert data into the employees table</span>
-<span class="k">INSERT</span> <span class="k">INTO</span> <span class="n">employees</span> <span class="p">(</span><span class="n">employee_name</span><span class="p">,</span> <span class="n">department_id</span><span class="p">)</span>
+<span class="k">INSERT</span> <span class="k">INTO</span> <span class="n">employees</span> <span class="p">(</span><span class="n">employee_name</span><span class="p">,</span> <span class="n">department_id</span><span class="p">,</span> <span class="n">manager_id</span><span class="p">)</span>
 <span class="k">VALUES</span>
-    <span class="p">(</span><span class="s1">'Alice'</span><span class="p">,</span> <span class="mi">1</span><span class="p">),</span>
-    <span class="p">(</span><span class="s1">'Bob'</span><span class="p">,</span> <span class="mi">2</span><span class="p">),</span>
-    <span class="p">(</span><span class="s1">'Charlie'</span><span class="p">,</span> <span class="mi">2</span><span class="p">),</span>
-    <span class="p">(</span><span class="s1">'David'</span><span class="p">,</span> <span class="mi">3</span><span class="p">),</span>
-    <span class="p">(</span><span class="s1">'Eve'</span><span class="p">,</span> <span class="mi">1</span><span class="p">);</span></code></pre></figure>
+    <span class="p">(</span><span class="s1">'Alice'</span><span class="p">,</span> <span class="mi">1</span><span class="p">,</span> <span class="k">NULL</span><span class="p">),</span>
+    <span class="p">(</span><span class="s1">'Bob'</span><span class="p">,</span> <span class="mi">2</span><span class="p">,</span> <span class="mi">1</span><span class="p">),</span>
+    <span class="p">(</span><span class="s1">'Charlie'</span><span class="p">,</span> <span class="mi">2</span><span class="p">,</span> <span class="mi">1</span><span class="p">),</span>
+    <span class="p">(</span><span class="s1">'David'</span><span class="p">,</span> <span class="mi">3</span><span class="p">,</span> <span class="mi">2</span><span class="p">),</span>
+    <span class="p">(</span><span class="s1">'Eve'</span><span class="p">,</span> <span class="mi">1</span><span class="p">,</span> <span class="k">NULL</span><span class="p">),</span>
+    <span class="p">(</span><span class="s1">'Fred'</span><span class="p">,</span> <span class="mi">4</span><span class="p">,</span> <span class="k">NULL</span><span class="p">),</span>
+    <span class="p">(</span><span class="s1">'George'</span><span class="p">,</span> <span class="k">NULL</span><span class="p">,</span> <span class="k">NULL</span><span class="p">);</span>  </code></pre></figure>
 
 <h3 id="inner-join">INNER JOIN</h3>
 
@@ -88,13 +91,69 @@
 
 <p><img src="/pictures/joins/employees.png" alt="Employees table" /></p>
 
-<p>When I run the inner join, it will retrieve the employees whose departmentId has a match in the departments table</p>
+<p>When I run the inner join, it will retrieve the employees whose departmentId has a match in the departments table. So only the ones who have a departmentId that exists in departments table, because George does not have a departmentId, he will not be part of the result</p>
 
 <figure class="highlight"><pre><code class="language-sql" data-lang="sql"><span class="k">SELECT</span> <span class="n">employees</span><span class="p">.</span><span class="n">employee_name</span><span class="p">,</span> <span class="n">departments</span><span class="p">.</span><span class="n">department_name</span>
 <span class="k">FROM</span> <span class="n">employees</span>
 <span class="k">INNER</span> <span class="k">JOIN</span> <span class="n">departments</span> <span class="k">ON</span> <span class="n">employees</span><span class="p">.</span><span class="n">department_id</span> <span class="o">=</span> <span class="n">departments</span><span class="p">.</span><span class="n">department_id</span><span class="p">;</span></code></pre></figure>
 
+<p>And this is the result:</p>
+
 <p><img src="/pictures/joins/innerJoin.png" alt="Employees table" /></p>
+
+<h3 id="left-join">LEFT JOIN</h3>
+
+<p>This will return all rows from the left table, and the matched rows from the right table. If no match is found, it returns <code class="language-plaintext highlighter-rouge">NULL</code> for columns of the right table.</p>
+
+<p>So that’s how employees table looks like:</p>
+
+<p><img src="/pictures/joins/employees.png" alt="Employees table" /></p>
+
+<p>And this is the departments table:</p>
+
+<p><img src="/pictures/joins/departments.png" alt="Departments table" /></p>
+
+<figure class="highlight"><pre><code class="language-sql" data-lang="sql"><span class="k">SELECT</span> <span class="n">employees</span><span class="p">.</span><span class="n">employee_name</span><span class="p">,</span> <span class="n">departments</span><span class="p">.</span><span class="n">department_name</span>
+<span class="k">FROM</span> <span class="n">employees</span>
+<span class="k">LEFT</span> <span class="k">JOIN</span> <span class="n">departments</span> <span class="k">ON</span> <span class="n">employees</span><span class="p">.</span><span class="n">department_id</span> <span class="o">=</span> <span class="n">departments</span><span class="p">.</span><span class="n">department_id</span><span class="p">;</span></code></pre></figure>
+
+<p>The result looks like below. Notice that in this case George is present, altough for him the department_name is <code class="language-plaintext highlighter-rouge">NULL</code>:</p>
+
+<p><img src="/pictures/joins/leftJoin.png" alt="Left join result" /></p>
+
+<h3 id="right-join">RIGHT JOIN</h3>
+
+<p>The right join will bring only employees with an assigned department (so George will not be present in the result), but also all the departments, even the ones with no employees. So when we did the <code class="language-plaintext highlighter-rouge">LEFT JOIN</code> we saw George was present in the result, even if he isn’t assigned to a department, but we didn’t see the departments with no employees. When we do the <code class="language-plaintext highlighter-rouge">RIGHT JOIN</code> the reverse is happening: employees with no department are not part of the result, instead departments with no employees are present.</p>
+
+<figure class="highlight"><pre><code class="language-sql" data-lang="sql"><span class="k">SELECT</span> <span class="n">employees</span><span class="p">.</span><span class="n">employee_name</span><span class="p">,</span> <span class="n">departments</span><span class="p">.</span><span class="n">department_name</span>
+<span class="k">FROM</span> <span class="n">employees</span>
+<span class="k">RIGHT</span> <span class="k">JOIN</span> <span class="n">departments</span> <span class="k">ON</span> <span class="n">employees</span><span class="p">.</span><span class="n">department_id</span> <span class="o">=</span> <span class="n">departments</span><span class="p">.</span><span class="n">department_id</span><span class="p">;</span></code></pre></figure>
+
+<p>Result:
+<img src="/pictures/joins/rightJoin.png" alt="Left join result" /></p>
+
+<h3 id="full-outer-join">FULL OUTER JOIN</h3>
+
+<p>If we want a <code class="language-plaintext highlighter-rouge">RIGHT JOIN</code> combined with a <code class="language-plaintext highlighter-rouge">LEFT JOIN</code> we need a <code class="language-plaintext highlighter-rouge">FULL OUTER JOIN</code>, meaning this type of <code class="language-plaintext highlighter-rouge">JOIN</code> will retrieve all employees (the ones with no department assigned included) and all departments (even the ones with no employees).</p>
+
+<figure class="highlight"><pre><code class="language-sql" data-lang="sql"><span class="k">SELECT</span> <span class="n">employees</span><span class="p">.</span><span class="n">employee_name</span><span class="p">,</span> <span class="n">departments</span><span class="p">.</span><span class="n">department_name</span>
+<span class="k">FROM</span> <span class="n">employees</span>
+<span class="k">FULL</span> <span class="k">OUTER</span> <span class="k">JOIN</span> <span class="n">departments</span> <span class="k">ON</span> <span class="n">employees</span><span class="p">.</span><span class="n">department_id</span> <span class="o">=</span> <span class="n">departments</span><span class="p">.</span><span class="n">department_id</span><span class="p">;</span></code></pre></figure>
+
+<p><img src="/pictures/joins/fullOuterJoin.png" alt="Full outer join result" /></p>
+
+<h3 id="self-join">SELF JOIN</h3>
+
+<p>Last, but not least is a <code class="language-plaintext highlighter-rouge">join</code> of the table employees done with itself, which is known as a self join.</p>
+
+<p>Basically inside the employees table, there’s a manager_id column. This contain the id of the employee which is also the manager of that employee. 
+<img src="/pictures/joins/employees.png" alt="Employees table" /></p>
+
+<p>As we can see in the result below, it returns all the employees (because it’s a left join and employees is the left table), with or without a manager assigned.</p>
+
+<p><img src="/pictures/joins/selfLeftJoin.png" alt="Self join" /></p>
+
+<p>And that’s it for my first post.</p>
 
   </div><a class="u-url" href="/sql/basic/2024/07/30/left-join-right-join-self-join.html" hidden></a>
 </article>

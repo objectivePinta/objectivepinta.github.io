@@ -88,6 +88,13 @@
 
 <p><img src="/pictures/joins/employees.png" alt="Employees table" /></p>
 
+<p>When I run the inner join, it will retrieve the employees whose departmentId has a match in the departments table</p>
+
+<figure class="highlight"><pre><code class="language-sql" data-lang="sql"><span class="k">SELECT</span> <span class="n">employees</span><span class="p">.</span><span class="n">employee_name</span><span class="p">,</span> <span class="n">departments</span><span class="p">.</span><span class="n">department_name</span>
+<span class="k">FROM</span> <span class="n">employees</span>
+<span class="k">INNER</span> <span class="k">JOIN</span> <span class="n">departments</span> <span class="k">ON</span> <span class="n">employees</span><span class="p">.</span><span class="n">department_id</span> <span class="o">=</span> <span class="n">departments</span><span class="p">.</span><span class="n">department_id</span><span class="p">;</span></code></pre></figure>
+
+<p><img src="/pictures/joins/innerJoin.png" alt="Employees table" /></p>
 
   </div><a class="u-url" href="/sql/basic/2024/07/30/left-join-right-join-self-join.html" hidden></a>
 </article>

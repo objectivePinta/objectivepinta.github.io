@@ -2,6 +2,7 @@
 layout: post
 title:  "Left Join, Right Join, Self Join"
 date:   2024-07-30 05:20:30 +0300
+tags: sql innerjoin postgres
 categories: sql basic
 ---
 
